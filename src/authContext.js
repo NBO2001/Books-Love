@@ -1,0 +1,2 @@
+import React, { createContext } from "react";
+export const authContext = createContext({ login: false});

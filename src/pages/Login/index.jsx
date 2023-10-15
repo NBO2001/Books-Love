@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
@@ -14,20 +14,88 @@ import TwitterIcon from "@mui/icons-material/Twitter";
 
 import { useNavigate } from 'react-router-dom';
 
+import { ToastContainer, toast } from 'react-toastify';
+
 
 const Login = () => {
+
+    const [ username, setUsername ] = useState("");
+    const [ password, setPassword ] = useState("");
+    const [inputError, setInputError] = useState({ username: false, password: false });
+    
     const navigate = useNavigate();
 
-    const authenticatorUse = (e) => {
+    const handleUsername = (e) => setUsername(e.target.value);
+
+    const handlePassword = (e) => setPassword(e.target.value);
+
+    const defineVariables = (user) => {
+
+        try{
+            localStorage.removeItem('auth/id');
+            localStorage.removeItem('auth/name');
+            localStorage.removeItem('auth/login');
+            
+            if(user){
+                localStorage.setItem('auth/id', user.id);
+                localStorage.setItem('auth/name', user.name);
+                localStorage.setItem('auth/username', user.username);
+                localStorage.setItem('auth/login', true);
+                navigate('/home');
+            }else{
+                toast.error('Incorrect username or password.');
+            }
+
+        }catch(e){
+            console.log(e);
+            toast.error('Error ao carregar a base!');
+        }
+
+    }
+
+    const authenticatorUse = async (e) => {
         e.preventDefault();
-        console.log("Authhenti");
-        // Obtendo o objeto history do React Router
-       
-        navigate('/');
+
+        if (!username || !password) {
+            
+            setInputError({
+                username: !username,
+                password: !password
+            });
+            return;
+        }
+        
+        setInputError({ username: false, password: false });
+
+        let usersBase = JSON.parse(localStorage.getItem("users")) || undefined;
+        
+        if(!usersBase){
+            
+            try{
+                const response = await fetch("/fake_base/users.json");
+                const data = await response.json();
+                localStorage.setItem("users", JSON.stringify(data));
+                usersBase = data || undefined;
+                const user = usersBase.users.find((user) => user.username === username && user.password === password);
+                defineVariables(user);
+
+            }catch(e){
+                console.log(e);
+                toast.error('Error ao carregar a base!');
+            }
+        }else{
+            const user = usersBase.users.find((user) => user.username === username && user.password === password);
+            defineVariables(user);
+        }
+        
+        
+        
+
     }
 
     return (
         <Container component="main" maxWidth="xs" sx={{ bgcolor: '#ffffff', height: "100vh", display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+            <ToastContainer />
             <Box sx={{ 
                 display: 'flex',
                 flexDirection: 'column',
@@ -46,11 +114,14 @@ const Login = () => {
                         margin="normal"
                         required
                         fullWidth
+                        onChange={handleUsername}
                         id="username"
                         label="Username"
                         name="username"
                         autoComplete="username"
                         sx={{ borderRadius: 50 }}
+                        error={inputError.username}
+                        helperText={inputError.username && "Username cannot be empty"}
                         autoFocus
                     />
                     <TextField
@@ -59,9 +130,12 @@ const Login = () => {
                         fullWidth
                         name="password"
                         label="Password"
+                        onChange={handlePassword}
                         type="password"
                         id="password"
                         sx={{ borderRadius: 50 }}
+                        error={inputError.password}
+                        helperText={inputError.password && "Password cannot be empty"}
                         autoComplete="current-password"
                     />
                     <FormControlLabel
