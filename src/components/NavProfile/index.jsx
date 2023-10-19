@@ -7,9 +7,15 @@ import Typography from '@mui/material/Typography';
 import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
 import { useNavigate } from 'react-router-dom';
+import Drawer from '@mui/material/Drawer';
+import Button from '@mui/material/Button';
+import MenuIcon from '@mui/icons-material/Menu';
 
-const Navbar = ({ title, children }) => {
+const NavProfile = ({ title, list, toggleDrawer, menu, children }) => {
+
     const navigate = useNavigate();
+
+    const [value, setValue] = useState(title);
 
     const profile = (e) => {
         e.preventDefault();
@@ -20,20 +26,32 @@ const Navbar = ({ title, children }) => {
         e.preventDefault();
         navigate('/search');
     }
-    
-    const [value, setValue] = useState(title);
 
-    const handleChange = (e, newValue) => {
+    const handleChange = (event, newValue) => {
         setValue(newValue);
     };
 
     return (
         <Fragment>
+            
+
             <AppBar position="static" color="primary" sx={{ bottom: 'auto', top: 0 }}>
-                <Toolbar sx={{ display: 'flex', justifyContent: 'center' }}>
+                <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
                     <Typography variant="h6" color="inherit" component="div">
                         Books Love
                     </Typography>
+
+                    <React.Fragment key={'right'}>
+                        <Button  color="inherit" onClick={toggleDrawer('right', true)}><MenuIcon /></Button>
+                        <Drawer
+                            anchor={'right'}
+                            open={menu}
+                            onClose={toggleDrawer('right', false)}
+                        >
+                            {list('right')}
+                        </Drawer>
+                    </React.Fragment>
+
                 </Toolbar>
             </AppBar>
             { children }
@@ -47,4 +65,4 @@ const Navbar = ({ title, children }) => {
     );
 };
 
-export default Navbar;
+export default NavProfile;

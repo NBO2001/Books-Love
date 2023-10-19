@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
@@ -22,6 +22,44 @@ const Login = () => {
     const [ username, setUsername ] = useState("");
     const [ password, setPassword ] = useState("");
     const [inputError, setInputError] = useState({ username: false, password: false });
+
+
+    useEffect(() => {
+        // Função para carregar os dados do arquivo JSON
+        const loadData = async () => {
+          try {
+            // Faça a requisição para o arquivo JSON
+            const response = await fetch("/fake_base/books.json");
+            const data = await response.json();
+            localStorage.setItem("books", JSON.stringify(data));
+          } catch (error) {
+            console.error(error);
+            toast.error("Erro ao carregar a base de dados.");
+          }
+        };
+
+        const loadUsers = async () => {
+
+            try{
+                const response = await fetch("/fake_base/users.json");
+                const data = await response.json();
+                localStorage.setItem("users", JSON.stringify(data));
+            }catch(error){
+                console.error(error);
+                toast.error("Erro ao carregar a base de dados.");
+            }
+        }
+
+    
+        if (!localStorage.getItem("books")) {
+          loadData();
+        }
+
+        if (!localStorage.getItem("users")) {
+            loadUsers();
+        }
+
+      }, []);
     
     const navigate = useNavigate();
 
