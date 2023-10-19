@@ -61,7 +61,7 @@ const Cadastro = () => {
     }
 
 
-    const sendForback = (e) => {
+    const sendForback = async (e) => {
 
         e.preventDefault();
         
@@ -78,28 +78,65 @@ const Cadastro = () => {
             return;
         }
 
-        const usersTable = JSON.parse(localStorage.getItem("users")) || undefined;
+        let usersTable = JSON.parse(localStorage.getItem("users")) || undefined;
 
-        if(!usersTable) return;
+        if(!usersTable){
+            try{
+                const response = await fetch("/fake_base/users.json");
+                const data = await response.json();
+                localStorage.setItem("users", JSON.stringify(data));
+                usersTable = data || undefined;
 
-        let maxIdx = 0;
+                let maxIdx = 0;
 
-        usersTable.users.map( (user) => {
-            if(user.id > maxIdx) maxIdx = user.id;
-        });
+                usersTable.users.map( (user) => {
+                    if(user.id > maxIdx) maxIdx = user.id;
+                });
 
-        const newUser = {
-            "id": maxIdx+1, 
-            "name": name, 
-            "username": username, 
-            "password": password
+                const newUser = {
+                    "id": maxIdx+1, 
+                    "name": name, 
+                    "username": username, 
+                    "password": password
+                }
+
+                const updatedUsers = {"users": [...usersTable.users, newUser]};
+
+                localStorage.setItem("users", JSON.stringify(updatedUsers));
+                
+                defineVariables(user);
+
+                return;
+
+            }catch(e){
+                console.log(e);
+                toast.error('Error ao carregar a base!');
+            }
+            return;
+        }else{
+
+            let maxIdx = 0;
+
+            usersTable.users.map( (user) => {
+                if(user.id > maxIdx) maxIdx = user.id;
+            });
+
+            const newUser = {
+                "id": maxIdx+1, 
+                "name": name, 
+                "username": username, 
+                "password": password
+            }
+
+            const updatedUsers = {"users": [...usersTable.users, newUser]};
+
+            localStorage.setItem("users", JSON.stringify(updatedUsers));
+
+            defineVariables(newUser);
+
         }
 
-        const updatedUsers = {"users": [...usersTable.users, newUser]};
-
-        localStorage.setItem("users", JSON.stringify(updatedUsers));
-
-        defineVariables(newUser);
+        
 
     }
 

@@ -13,8 +13,9 @@ const App = () => {
       <Reset />
       <Router>
           <Routes>
-            <Route path="/" index element={ <BookLove /> } />
-            <Route path="/login" element={<Login />} />
+            <Route path="/" index element={<Login />} />
+            <Route path="/login" index element={<Login />} />
+            {/* <Route path="/"  element={ <BookLove /> } /> */}
             <Route path="/signup" element={<Cadastro />} />
             <Route path="/home" element={<PrivateRouter pathRedirect="/login"> <Home /> </PrivateRouter> } />
             <Route path="*" element={ <NotFound /> } />
