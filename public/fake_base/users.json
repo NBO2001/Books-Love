@@ -5,13 +5,16 @@
         "name": "Natanael Bezerra", 
         "username": "nbo2001", 
         "password": "froZen123@",
+        "email": "natanael.oliveira@icomp.ufam.edu.br",
         "img_profile": "https://media.licdn.com/dms/image/D4D03AQFwxvgeUh703Q/profile-displayphoto-shrink_200_200/0/1665617011866?e=1703116800&v=beta&t=TIaVY63Ux9fxvKTCgQJzaCdMUIOtfqfB5Pe6sjVX3n0"
       },
       {
         "id": 2, 
         "name":"Beatriz", 
         "username": "bea123", 
-        "password": "beaSenha123"
+        "password": "beaSenha123",
+        "email": "beatriz.souza@icomp.ufam.edu.br",
+        "img_profile": "https://shop.rosiethorns.com/cdn/shop/files/bittenFruit_ig3_540x.jpg"
       }
     ]
 }

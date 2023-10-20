@@ -26,6 +26,9 @@ import InsertEmoticonIcon from '@mui/icons-material/InsertEmoticon';
 
 const Profile = ({ title }) => {
   const [value, setValue] = React.useState('0');
+  
+  const user_local = localStorage.getItem("auth/object");
+  const user = JSON.parse(user_local);
 
   const [state, setState] = useState(false);
 
@@ -71,12 +74,12 @@ const Profile = ({ title }) => {
           <Avatar
             variant="outlined"
             size="sm"
-            src="https://media.licdn.com/dms/image/D4D03AQFwxvgeUh703Q/profile-displayphoto-shrink_200_200/0/1665617011866?e=1703116800&v=beta&t=TIaVY63Ux9fxvKTCgQJzaCdMUIOtfqfB5Pe6sjVX3n0"
+            src={user.img_profile}
           />
 
           <Box sx={{ minWidth: 0, flex: 1 }}>
-            <Typography level="title-sm">Siriwat K.</Typography>
-            <Typography level="body-xs">siriwatk@test.com</Typography>
+            <Typography level="title-sm">{ user.name }</Typography>
+            <Typography level="body-xs">{user.email}</Typography>
           </Box>
           <IconButton size="sm" variant="plain" color="neutral">
             <LogoutRoundedIcon />
@@ -142,7 +145,7 @@ const Profile = ({ title }) => {
           {/* Profile Picture */}
           <AspectRatio ratio="1" maxHeight={200} sx={{ minWidth: 120, borderRadius: '50%', padding:2 }}>
             <img
-              src="https://media.licdn.com/dms/image/D4D03AQFwxvgeUh703Q/profile-displayphoto-shrink_200_200/0/1665617011866?e=1703116800&v=beta&t=TIaVY63Ux9fxvKTCgQJzaCdMUIOtfqfB5Pe6sjVX3n0"
+              src={user.img_profile}
               loading="lazy"
               alt="Profile"
               style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }}

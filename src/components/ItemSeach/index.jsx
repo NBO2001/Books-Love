@@ -10,8 +10,6 @@ import Typography from '@mui/material/Typography';
 const ItemSeach = ({item}) => {
 
     const maxDescriptionLength = 150;
-    const maxTitleLength = 50; 
-
 
     const truncatedDescription = item && item.describe ? (
         item.describe.length > maxDescriptionLength

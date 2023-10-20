@@ -73,13 +73,15 @@ const Login = () => {
             localStorage.removeItem('auth/id');
             localStorage.removeItem('auth/name');
             localStorage.removeItem('auth/login');
+            localStorage.removeItem('auth/object');
             
             if(user){
                 localStorage.setItem('auth/id', user.id);
                 localStorage.setItem('auth/name', user.name);
                 localStorage.setItem('auth/username', user.username);
+                localStorage.setItem('auth/object', JSON.stringify(user));
                 localStorage.setItem('auth/login', true);
-                navigate('/home');
+                navigate('/search');
             }else{
                 toast.error('Incorrect username or password.');
             }
