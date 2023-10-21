@@ -7,6 +7,8 @@ import Skeleton from '@mui/material/Skeleton';
 import Rating from '@mui/material/Rating';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
+import Fab from '@mui/material/Fab';
+import AddIcon from '@mui/icons-material/Add';
 
 const style = {
     position: 'absolute',
@@ -26,7 +28,7 @@ const closeButtonStyle = {
     right:"15px",
 };
 
-const ModalBook = ({ open, setOpen, bookId }) => {
+const ModalBook = ({ open, setOpen, bookId, clickList }) => {
 
     const handleClose = () => setOpen(false);
 
@@ -79,6 +81,10 @@ const ModalBook = ({ open, setOpen, bookId }) => {
                             {book.describe}
                         </Typography>) : (<Skeleton variant="rectangular" width={210} height={60} />)
                     }
+
+                    <Fab onClick={(e) => clickList(e, bookId)} size="small" sx={{mt:5,bottom: "5px",left: "15px", zIndex: 0}} color="primary" aria-label="add" >
+                        <AddIcon />
+                    </Fab>
 
                 </Box>
             </Modal>

@@ -82,7 +82,7 @@ const Search = ({ title }) => {
           </ItemSeach>
         ))}
 
-      <ModalBook open={open} setOpen={setOpen} bookId={bookId}/>
+      <ModalBook open={open} setOpen={setOpen} clickList={clickList} bookId={bookId}/>
       <ModalList open={openList} setOpen={setOpenList} bookId={bookId}/>
 
       </NavSearch>

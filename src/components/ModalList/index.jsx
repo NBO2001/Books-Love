@@ -35,7 +35,20 @@ const closeButtonStyle = {
 
 const ModalList = ({ open, setOpen, bookId }) => {
 
-    const handleClose = () => setOpen(false);
+    const [selectedOptions, setSelectedOptions] = useState([]);
+    const handleClose = () => {
+        setSelectedOptions([]);
+        setOpen(false);
+    };
+
+    useEffect(() => {
+        if (open) {
+            const nowListsOfBook = listsBase.filter((lst) =>
+              lst.books.some((id) => id === bookId)
+            );
+            setSelectedOptions(nowListsOfBook);
+        }
+    }, [open])
 
     const booksBase = JSON.parse(localStorage.getItem("books")) || [];
     const book = booksBase.find((bk) => bk.id == bookId);
@@ -46,6 +59,76 @@ const ModalList = ({ open, setOpen, bookId }) => {
     const listsBase_ = JSON.parse(localStorage.getItem("lists")) || [];
 
     const listsBase = listsBase_.filter( (lista) => user_list.includes(lista.id));
+      
+
+    const handleOptionsChange = (event, newSelectedOptions) => {
+        if(newSelectedOptions.length !== 0){
+
+            const addValue = newSelectedOptions[newSelectedOptions.length-1];
+            const find = selectedOptions.some( (list) => list.id===addValue.id);
+
+            if(find){
+                const remove = selectedOptions.filter( (lst) => lst.id !== addValue.id);
+                setSelectedOptions(remove);
+            }else{
+                setSelectedOptions([...selectedOptions, addValue])
+            }
+
+        }else{
+            setSelectedOptions(newSelectedOptions);
+        }
+        
+    };
+
+    const verifyCheck = (optionId) => {
+
+        const tolLists = selectedOptions.filter( (lst) => lst.id===optionId );
+
+        if(tolLists.length === 0) return false;
+        else return true;
+    }
+
+    const addBookInLists = (e) => {
+        e.preventDefault();
+
+        const listsBaseAll = JSON.parse(localStorage.getItem("lists")) || [];
+
+        const nowListsOfBook = listsBase.filter((lst) =>
+              lst.books.some((id) => id === bookId)
+         );
+        
+        const removidos = nowListsOfBook.filter( (lst) => !(selectedOptions.some( (option) => option.id===lst.id)) );
+        const adicionados = selectedOptions.filter( (lst) => !(nowListsOfBook.some( (option) => option.id===lst.id)) );
+
+
+        const newBase = listsBaseAll.map((lst) => {
+
+            if(removidos.some( (option) => option.id===lst.id)){
+
+                lst.books = lst.books.filter( (id) => id !== bookId);
+                
+                return lst;
+            }
+
+            if(adicionados.some( (option) => option.id===lst.id)){
+                lst.books.push(bookId);
+                return lst;
+            }
+
+            return lst;
+
+        });
+
+
+        localStorage.removeItem("lists");
+        localStorage.setItem("lists", JSON.stringify(newBase));
+
+        // Avisar o sucesso
+
+        setOpen(false);
+        
+    }
+
 
     return (
         <div>
@@ -93,24 +176,31 @@ const ModalList = ({ open, setOpen, bookId }) => {
                     id="checkboxes-tags-1578"
                     options={listsBase}
                     disableCloseOnSelect
+                    value={selectedOptions}
+                    onChange={handleOptionsChange}      
+                    getOptionSelected={(option, value) => option.id === value.id}
                     getOptionLabel={(option) => option.title}
-                    renderOption={(props, option, { selected }) => (
-                        <li {...props}>
-                        <Checkbox
-                            icon={icon}
-                            checkedIcon={checkedIcon}
-                            style={{ marginRight: 8 }}
-                            checked={selected}
-                        />
-                        {option.title}
-                        </li>
-                    )}
+                    renderOption={(props, option) => {
+                        return(
+                            <li {...props}>
+                            <Checkbox
+                                key={option.id}
+                                icon={icon}
+                                checkedIcon={checkedIcon}
+                                style={{ marginRight: 8 }}
+                                checked={verifyCheck(option.id)}
+                            />
+                            {option.title}
+                            </li>
+                        )
+
+                    }}
                     style={{ maxWidth: 500 }}
                     renderInput={(params) => (
                         <TextField {...params} label="Tags" placeholder="Quais tags?" />
                     )}
                     />
-                    <Fab color="secondary" sx={{mt:5, width:"180px"}}  variant="extended">Adicionar</Fab>
+                    <Fab onClick={addBookInLists} color="secondary" sx={{mt:5, width:"180px"}}  variant="extended">Adicionar</Fab>
                 </Box>
                 
             </Modal>
