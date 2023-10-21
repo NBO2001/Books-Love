@@ -151,7 +151,7 @@ const NavSearch = ({ title, filters, setFilters, searchButtom, inputSearch, chil
                     onChange={inputSearch}
                     onKeyDown={(e) => {
                         if (e.key === 'Enter') {
-                            e.preventDefault(); // Isso impede o comportamento padrão de pressionar Enter (recarregar a página)
+                            e.preventDefault();
                             searchButtom(e);
                         }
                     }}

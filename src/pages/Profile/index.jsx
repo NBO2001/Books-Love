@@ -1,8 +1,7 @@
 import React, {useState} from "react";
-import { NavProfile, ItemList } from "../../components";
+import { NavProfile, ItemList, ItemSeach, ModalItem } from "../../components";
 import Avatar from '@mui/material/Avatar';
 import Stack from '@mui/material/Stack';
-import { deepOrange, deepPurple } from '@mui/material/colors';
 import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
 import TabContext from '@mui/lab/TabContext';
@@ -19,13 +18,14 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import InsertEmoticonIcon from '@mui/icons-material/InsertEmoticon';
+import Fab from '@mui/material/Fab';
+import AddIcon from '@mui/icons-material/Add';
 
 const Profile = ({ title }) => {
-  const [value, setValue] = React.useState('0');
+  const [value, setValue] = useState('0');
+  const [open, setOpen] = useState(false);
   
   const user_local = localStorage.getItem("auth/object");
   const user = JSON.parse(user_local);
@@ -43,6 +43,10 @@ const Profile = ({ title }) => {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
+  const openModal = (e) => {
+    setOpen(true);
+  }
 
   const list = (anchor) => (
     <Box
@@ -96,39 +100,19 @@ const Profile = ({ title }) => {
   const followers = 250;
   const following = 80;
 
-  const dataTags = [
-    {
-      "id": 1,
-      "title": "Lidos",
-      "cover": "https://m.media-amazon.com/images/I/81S4dsWUoFL._SL1500_.jpg",
-      "describe": "Os meus livros lidos",
-      "books": [1,8,6,3,7,2]
-    },
-    {
-      "id": 2,
-      "title": "Lendo",
-      "cover": "https://m.media-amazon.com/images/I/81sGirC3z5L._SL1500_.jpg",
-      "describe": "Minhas atuais leituras",
-      "books": [6,7,5]
-    },
-    {
-      "id": 3,
-      "title": "Quero ler",
-      "cover": "https://m.media-amazon.com/images/I/91bWAiUqgGL._SL1500_.jpg",
-      "describe": "Os livros que quero ler em um futuro breve",
-      "books": [158,554,154,841,359,1585,61657,15486,135,6958,36,58]
-    }
-    ,
-    {
-      "id": 4,
-      "title": "Perfeição em livros",
-      "cover": "https://m.media-amazon.com/images/I/71D7UgWOv1L._SL1500_.jpg",
-      "describe": "Meus livros favoritos",
-      "books": [978,513,697,58]
-    }
-  ]
+  const dataTags_all = JSON.parse(localStorage.getItem("lists")) || []; 
 
+  const listsOfUser = user.lists;
 
+  const dataTags = dataTags_all.filter( (listIn) => listsOfUser.includes(listIn.id) );
+
+  const books_ = localStorage.getItem("books");
+  const books = JSON.parse(books_) || [];
+  
+  const booksOfTag = (ids) => {
+    const bookSelected = books.filter( (book) => ids.includes(book.id) );
+    return bookSelected;
+  }
 
   return (
     <NavProfile title={title} list={list} toggleDrawer={toggleDrawer} menu={state}>
@@ -232,18 +216,22 @@ const Profile = ({ title }) => {
 
         
         ) ) }
+        <Fab sx={{position:"fixed", bottom: "40px", right: "15px"}} color="primary" aria-label="add" onClick={openModal}>
+          <AddIcon />
+        </Fab>
         </TabPanel>
 
         { dataTags.map( (onceList) => (
           <TabPanel key={onceList.id} value={onceList.id}>
-             <Typography variant="subtitle1" color="text.secondary">
-             {onceList.title}
-            </Typography>
+            { booksOfTag(onceList.books).map( (book) => (<ItemSeach item={book} />)) }
           </TabPanel>
         ) ) }
       
 
       </TabContext>
+
+      
+      <ModalItem open={open} setOpen={setOpen} />
     </NavProfile>
   );
 };

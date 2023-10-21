@@ -6,3 +6,6 @@ export { default as NavProfile } from  './NavProfile';
 export { default as ItemList } from  './ItemList';
 export { default as NavSearch } from './NavSearch';
 export { default as ItemSeach } from './ItemSeach';
+export { default as ModalItem } from './ModalItem';
+export { default as ModalBook } from './ModalBook';
+export { default as ModalList } from './ModalList';

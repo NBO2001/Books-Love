@@ -50,6 +50,17 @@ const Login = () => {
             }
         }
 
+        const loadLists = async () => {
+
+            try{
+                const response = await fetch("/fake_base/lists.json");
+                const data = await response.json();
+                localStorage.setItem("lists", JSON.stringify(data));
+            }catch(e){
+                console.error(error);
+                toast.error("Erro ao carregar a base de dados.");
+            }
+        }
     
         if (!localStorage.getItem("books")) {
           loadData();
@@ -57,6 +68,10 @@ const Login = () => {
 
         if (!localStorage.getItem("users")) {
             loadUsers();
+        }
+
+        if(!localStorage.getItem("lists")){
+            loadLists();
         }
 
       }, []);

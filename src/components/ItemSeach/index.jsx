@@ -7,7 +7,7 @@ import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 
 
-const ItemSeach = ({item}) => {
+const ItemSeach = ({item, onClick, children}) => {
 
     const maxDescriptionLength = 150;
 
@@ -19,7 +19,7 @@ const ItemSeach = ({item}) => {
 
 
     return(
-        <Card sx={{ display: 'flex', mb:1 }}>
+        <Card sx={{ display: 'flex', mb:1 }} onClick={onClick}>
             {item ? (<CardMedia
                 component="img"
                 sx={{ maxWidth: 120 }}
@@ -46,6 +46,7 @@ const ItemSeach = ({item}) => {
                     </Typography>): (<Skeleton variant="rectangular" width={210} height={60} />)}
 
                 </CardContent>
+                {children}
             </Box>
             
         </Card>

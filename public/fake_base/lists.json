@@ -1,0 +1,38 @@
+[
+    {
+        "id": 1,
+        "title": "Lidos",
+        "cover": "https://m.media-amazon.com/images/I/81S4dsWUoFL._SL1500_.jpg",
+        "describe": "Os meus livros lidos",
+        "books": [1,8,6,3,7,2]
+    },
+    {
+        "id": 2,
+        "title": "Lendo",
+        "cover": "https://m.media-amazon.com/images/I/81sGirC3z5L._SL1500_.jpg",
+        "describe": "Minhas atuais leituras",
+        "books": [6,7,5]
+    },
+    {
+        "id": 3,
+        "title": "Quero ler",
+        "cover": "https://m.media-amazon.com/images/I/91bWAiUqgGL._SL1500_.jpg",
+        "describe": "Os livros que quero ler em um futuro breve",
+        "books": [10,26,30]
+    }
+    ,
+    {
+        "id": 4,
+        "title": "Perfeição em livros",
+        "cover": "https://m.media-amazon.com/images/I/71D7UgWOv1L._SL1500_.jpg",
+        "describe": "Meus livros favoritos",
+        "books": [15,25,96]
+    },
+    {
+        "id": 5,
+        "title": "Lidos",
+        "cover": "https://m.media-amazon.com/images/I/81S4dsWUoFL._SL1500_.jpg",
+        "describe": "Os meus livros lidos em 2025",
+        "books": [1,8]
+    }
+]

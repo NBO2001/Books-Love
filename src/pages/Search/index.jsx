@@ -1,11 +1,15 @@
 import React, {useEffect, useState} from "react";
-import {NavSearch, ItemSeach } from "../../components";
-
+import {NavSearch, ItemSeach, ModalBook, ModalList } from "../../components";
+import Fab from '@mui/material/Fab';
+import AddIcon from '@mui/icons-material/Add';
 
 const Search = ({ title }) => {
     const [books, setBooks] = useState([]);
     const [ searchBook, setSearchBook ] = useState("");
     const [ filters, setFilters ] = useState([]);
+    const [open, setOpen] = useState(false);
+    const [openList, setOpenList] = useState(false);
+    const [ bookId, setBookId ] = useState(0);
   
     useEffect(() => {
       const loadData = () => {
@@ -56,12 +60,31 @@ const Search = ({ title }) => {
 
       setSearchBook(e.target.value);
     }
+
+    const viewBook = (id) => {
+      setBookId(id);
+      setOpen(true);
+    }
+
+    const clickList = (e, value) => {
+      e.stopPropagation();
+      setBookId(value);
+      setOpenList(true);
+    }
   
     return (
       <NavSearch title={title} filters={filters} setFilters={setFilters} searchButtom={handleSearch} inputSearch={iptSearch}>
         {books.map((book) => (
-          <ItemSeach item={book} key={book.id} />
+          <ItemSeach item={book} key={book.id} onClick={(e) => viewBook(book.id)} >
+            <Fab onClick={(e) => clickList(e, book.id)} size="small" sx={{bottom: "5px",left: "15px", zIndex: 0}} color="primary" aria-label="add" >
+              <AddIcon />
+            </Fab>
+          </ItemSeach>
         ))}
+
+      <ModalBook open={open} setOpen={setOpen} bookId={bookId}/>
+      <ModalList open={openList} setOpen={setOpenList} bookId={bookId}/>
+
       </NavSearch>
     );
   };
