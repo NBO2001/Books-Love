@@ -5,9 +5,12 @@ import Skeleton from '@mui/material/Skeleton';
 import Box from '@mui/material/Box';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
+import CardHeader from '@mui/material/CardHeader';
+import IconButton from '@mui/material/IconButton';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 
-const ItemSeach = ({item, onClick, children}) => {
+const ItemSeach = ({item, onClick, openSettings, children}) => {
 
     const maxDescriptionLength = 150;
 
@@ -19,35 +22,50 @@ const ItemSeach = ({item, onClick, children}) => {
 
 
     return(
-        <Card sx={{ display: 'flex', mb:1 }} onClick={onClick}>
-            {item ? (<CardMedia
-                component="img"
-                sx={{ maxWidth: 120 }}
-                image={item.src}
-                alt="Book img"
-            />): (<Skeleton variant="rectangular" width={120} height={118} />)}
+        <Card  sx={{ display: 'flex', mb:1, justifyContent: "space-between" }} onClick={onClick}>
+            <Box sx={{ display: 'flex'}}>
+                {item ? (<CardMedia
+                    component="img"
+                    sx={{ maxWidth: 120 }}
+                    image={item.src}
+                    alt="Book img"
+                />): (<Skeleton variant="rectangular" width={120} height={118} />)}
 
-            <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                <CardContent sx={{ flex: '1 0 auto' }}>
-                    {item ? (
-                        <Typography component="div" variant="h5" sx={{ overflow: 'hidden', textOverflow: 'ellipsis',maxHeight: "35px", width: "100%" }}>
-                            {item.title ? item.title : "error"}
-                        </Typography>
-                    ) : (
-                        <Skeleton variant="rectangular" width={210} height={20} />
-                    )}
+                <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                    <CardContent sx={{ flex: '1 0 auto' }}>
+                        {item ? (
+                            <Typography component="div" variant="h5" sx={{ overflow: 'hidden', textOverflow: 'ellipsis',maxHeight: "35px", width: "100%" }}>
+                                {item.title ? item.title : "error"}
+                            </Typography>
+                        ) : (
+                            <Skeleton variant="rectangular" width={210} height={20} />
+                        )}
 
-                    {item ? (<Typography variant="subtitle1" color="text.secondary" sx={{ mb: 1.5 }} component="div">
-                        by {item.author ? item.author : "error"}
-                    </Typography>): (<Skeleton variant="rectangular" width={210} height={15} />)}
+                        {item ? (<Typography variant="subtitle1" color="text.secondary" sx={{ mb: 1.5 }} component="div">
+                            by {item.author ? item.author : "error"}
+                        </Typography>): (<Skeleton variant="rectangular" width={210} height={15} />)}
 
-                    {item ? (<Typography variant="body2"  component="div">
-                        {truncatedDescription}
-                    </Typography>): (<Skeleton variant="rectangular" width={210} height={60} />)}
+                        {item ? (<Typography variant="body2"  component="div">
+                            {truncatedDescription}
+                        </Typography>): (<Skeleton variant="rectangular" width={210} height={60} />)}
 
-                </CardContent>
-                {children}
+                    </CardContent>
+                    
+                        
+                    {children}
+                </Box>
+
             </Box>
+            { openSettings && (
+                    <CardHeader
+                    onClick={openSettings}
+                    action={
+                    <IconButton aria-label="settings">
+                        <MoreVertIcon />
+                    </IconButton>
+                    }
+                />
+                )}
             
         </Card>
 

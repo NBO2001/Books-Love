@@ -14,13 +14,27 @@ const Search = ({ title }) => {
     useEffect(() => {
       const loadData = () => {
         const booksBase = JSON.parse(localStorage.getItem("books"));
-        // Use o método slice para obter apenas os primeiros 10 livros
-        const first10Books = booksBase ? booksBase.slice(0, 10) : [];
-        setBooks(first10Books);
+
+        const shuffledBooks = booksBase ? shuffleArray(booksBase) : [];
+    
+        const first10RandomBooks = shuffledBooks.slice(0, 10);
+    
+        setBooks(first10RandomBooks);
       };
-  
+    
       loadData();
     }, []);
+
+    const shuffleArray = (array) => {
+      
+      const shuffledArray = [...array];
+      for (let i = shuffledArray.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
+      }
+
+      return shuffledArray;
+    }
 
     const applyFilters = (data) => {
       if (filters.length === 0) {
@@ -42,7 +56,9 @@ const Search = ({ title }) => {
       if (searchBook.trim() === "") {
         const booksBase = JSON.parse(localStorage.getItem("books"));
         const filteredBooks = applyFilters(booksBase);
-        const first10Books = filteredBooks.slice(0, 10);
+        const shuffledBooks = filteredBooks ? shuffleArray(filteredBooks) : [];
+        const first10Books = shuffledBooks.slice(0, 10);
+
         setBooks(first10Books);
       } else {
         const booksBase = JSON.parse(localStorage.getItem("books"));

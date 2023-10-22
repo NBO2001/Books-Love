@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import Menu from '@mui/material/Menu';
 
 
-const MenuComponent = ({anchorEl, handleClose, children}) => {
+const MenuComponent = ({anchorEl, handleClose, id, children}) => {
 
     return(
         <Menu
-            id="menu-appbar"
+            id={id}
             anchorEl={anchorEl}
             anchorOrigin={{
                 vertical: 'top',

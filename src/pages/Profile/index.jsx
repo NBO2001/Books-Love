@@ -31,9 +31,11 @@ import { ToastContainer, toast } from 'react-toastify';
 const Profile = ({ title }) => {
   const [value, setValue] = useState('0');
   const [open, setOpen] = useState(false);
-  const [anchorEl, setAnchorEl] = useState(null);
+  const [anchorElList, setAnchorElList] = useState(null);
+  const [anchorElBook, setAnchorElBook] = useState(null);
   const [ idList, setIdList ] = useState(null);
   const [ modalEditList, setModalEditList ] = useState(false);
+  const [ bookRemoveId, setBookRemoveId ] = useState(null);
   
   const user_local = localStorage.getItem("auth/object");
   const user = JSON.parse(user_local);
@@ -120,14 +122,24 @@ const Profile = ({ title }) => {
     return bookSelected;
   }
 
-  const openSettings = (e, idBook) => {
-    e.stopPropagation(); 
-    setIdList(idBook);
-    setAnchorEl(e.currentTarget);
+  const openSettings = (e, idList) => {
+    e.stopPropagation();
+    setIdList(idList);
+    setAnchorElList(e.currentTarget); 
+  };
+
+  const bookOptions = (e, idBook) => {
+    e.stopPropagation();
+    setBookRemoveId(idBook);
+    setAnchorElBook(e.currentTarget);
   };
 
   const handleClose = () => {
-    setAnchorEl(null);
+    setAnchorElList(null);
+  };
+
+  const handleCloseBook = () => {
+    setAnchorElBook(null);
   };
   
   const deleteList = (e) => {
@@ -151,9 +163,29 @@ const Profile = ({ title }) => {
 
     toast.success("Removido com sucesso!");
 
-    setAnchorEl(null);
+    setAnchorElList(null);
 
   }
+
+  const deleteBookList = (e) => {
+
+    if(bookRemoveId){
+
+      const newData = dataTags_all.map( (lst) => {
+        if(lst.id == bookRemoveId.list){
+          lst.books = lst.books.filter( (bkId) => bkId !==  bookRemoveId.book);
+        }
+
+        return lst;
+      });
+
+      localStorage.setItem("lists", JSON.stringify(newData));
+      toast.success("Removido com sucesso!");
+      setAnchorElBook(null);
+
+    };
+
+  };
   
 
   return (
@@ -251,17 +283,24 @@ const Profile = ({ title }) => {
 
         { dataTags && dataTags.map( (onceList) => (
           <TabPanel key={onceList.id} value={onceList.id}>
-            { booksOfTag(onceList.books).map( (book) => (<ItemSeach item={book} />)) }
+            { booksOfTag(onceList.books).map( (book) => (<ItemSeach openSettings={(e) => bookOptions(e, { book: book.id, list: onceList.id})} item={book} />)) }
           </TabPanel>
         ) ) }
       
 
       </TabContext>
+      
+      <MenuComponent id={"myMenus"} anchorEl={anchorElBook} handleClose={handleCloseBook}>
+        <MenuItem onClick={deleteBookList} ><DeleteIcon /> Remove</MenuItem>
+      </MenuComponent>
 
-      <MenuComponent anchorEl={anchorEl} handleClose={handleClose}>
+      <MenuComponent id={"15481-comp"} anchorEl={anchorElList} handleClose={handleClose}>
         <MenuItem onClick={(e) => setModalEditList(true)}><ModeIcon /> Edit</MenuItem>
         <MenuItem onClick={deleteList}><DeleteIcon /> Delete</MenuItem>
       </MenuComponent>
+
+
+      
 
       
       <ModalItem open={open} setOpen={setOpen} />
