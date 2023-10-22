@@ -125,9 +125,9 @@ const ModalItem = ({open, setOpen}) => {
         >
           <Box sx={style}>
             <Typography id="modal-modal-title" variant="h6" component="h2">
-              Inserir Nova Tag
+              Inserir uma Nova Lista
             </Typography>
-            <TextField value={tagName} onChange={handleTag} id="standard-basic" fullWidth label="Tag" variant="standard" sx={{mb: 3}} />
+            <TextField value={tagName} onChange={handleTag} id="standard-basic" fullWidth label="Nome da lista" variant="standard" sx={{mb: 3}} />
 
             <TextField
                 id="outlined-multiline-static"

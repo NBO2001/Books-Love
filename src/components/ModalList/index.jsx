@@ -197,7 +197,7 @@ const ModalList = ({ open, setOpen, bookId }) => {
                     }}
                     style={{ maxWidth: 500 }}
                     renderInput={(params) => (
-                        <TextField {...params} label="Tags" placeholder="Quais tags?" />
+                        <TextField {...params} label="Listas" placeholder="Quais listas?" />
                     )}
                     />
                     <Fab onClick={addBookInLists} color="secondary" sx={{mt:5, width:"180px"}}  variant="extended">Adicionar</Fab>

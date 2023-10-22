@@ -1,8 +1,5 @@
 import React, { Fragment, useState } from "react";
 import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import PersonIcon from '@mui/icons-material/Person';
-import Typography from '@mui/material/Typography';
 import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
 import { useNavigate } from 'react-router-dom';
@@ -13,7 +10,6 @@ import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import Box from '@mui/material/Box';
@@ -22,6 +18,7 @@ import Fab from '@mui/material/Fab';
 import AddIcon from '@mui/icons-material/Add';
 import Button from '@mui/material/Button';
 import Chip from '@mui/material/Chip';
+import AutoStoriesIcon from '@mui/icons-material/AutoStories';
 
 
 const NavSearch = ({ title, filters, setFilters, searchButtom, inputSearch, children }) => {
@@ -183,7 +180,7 @@ const NavSearch = ({ title, filters, setFilters, searchButtom, inputSearch, chil
             {/* Bottom Navigation */}
             <BottomNavigation sx={{ width: '100%', position: 'fixed', bottom: 0, borderTop: '1px solid #ccc' }} value={value} onChange={handleChange}>
                 <BottomNavigationAction label="Search" value="search" icon={<SearchIcon />} onClick={search} />
-                <BottomNavigationAction label="Profile" value="profile" icon={<PersonIcon />} onClick={profile} />
+                <BottomNavigationAction label="Book Shelf" value="BookShelf" icon={<AutoStoriesIcon />} onClick={profile} />
             </BottomNavigation>
         </Fragment>
     );

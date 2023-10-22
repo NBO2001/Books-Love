@@ -18,7 +18,7 @@ const App = () => {
             {/* <Route path="/"  element={ <BookLove /> } /> */}
             <Route path="/signup" element={<Cadastro />} />
             <Route path="/home" element={<PrivateRouter pathRedirect="/login"> <Home /> </PrivateRouter> } />
-            <Route path='/profile' element={ <PrivateRouter pathRedirect="/login"> <Profile title={"profile"}/> </PrivateRouter> } />
+            <Route path='/profile' element={ <PrivateRouter pathRedirect="/login"> <Profile title={"BookShelf"}/> </PrivateRouter> } />
             <Route path='/search' element={ <PrivateRouter pathRedirect="/login"> <Search title={"search"} /> </PrivateRouter> } />
             <Route path="*" element={ <NotFound /> } />
           </Routes>

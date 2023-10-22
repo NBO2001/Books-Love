@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import Drawer from '@mui/material/Drawer';
 import Button from '@mui/material/Button';
 import MenuIcon from '@mui/icons-material/Menu';
+import AutoStoriesIcon from '@mui/icons-material/AutoStories';
 
 const NavProfile = ({ title, list, toggleDrawer, menu, children }) => {
 
@@ -59,7 +60,7 @@ const NavProfile = ({ title, list, toggleDrawer, menu, children }) => {
             {/* Bottom Navigation */}
             <BottomNavigation sx={{ width: '100%', position: 'fixed', bottom: 0, borderTop: '1px solid #ccc' }} value={value} onChange={handleChange}>
                 <BottomNavigationAction label="Search" value="search" icon={<SearchIcon />} onClick={search} />
-                <BottomNavigationAction label="Profile" value="profile" icon={<PersonIcon />} onClick={profile} />
+                <BottomNavigationAction label="Book Shelf" value="BookShelf" icon={<AutoStoriesIcon />} onClick={profile} />
             </BottomNavigation>
         </Fragment>
     );

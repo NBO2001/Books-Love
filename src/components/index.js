@@ -9,3 +9,5 @@ export { default as ItemSeach } from './ItemSeach';
 export { default as ModalItem } from './ModalItem';
 export { default as ModalBook } from './ModalBook';
 export { default as ModalList } from './ModalList';
+export { default as MenuComponent } from './MenuComponent';
+export { default as ModalEditList } from './ModalEditList';

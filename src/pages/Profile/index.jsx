@@ -1,5 +1,5 @@
-import React, {useState} from "react";
-import { NavProfile, ItemList, ItemSeach, ModalItem } from "../../components";
+import React, {Fragment, useState} from "react";
+import { NavProfile, ItemList, ItemSeach, ModalItem, MenuComponent, ModalEditList } from "../../components";
 import Avatar from '@mui/material/Avatar';
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
@@ -22,10 +22,18 @@ import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import InsertEmoticonIcon from '@mui/icons-material/InsertEmoticon';
 import Fab from '@mui/material/Fab';
 import AddIcon from '@mui/icons-material/Add';
+import MenuItem from '@mui/material/MenuItem';
+import ModeIcon from '@mui/icons-material/Mode';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { ToastContainer, toast } from 'react-toastify';
+
 
 const Profile = ({ title }) => {
   const [value, setValue] = useState('0');
   const [open, setOpen] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [ idList, setIdList ] = useState(null);
+  const [ modalEditList, setModalEditList ] = useState(false);
   
   const user_local = localStorage.getItem("auth/object");
   const user = JSON.parse(user_local);
@@ -97,14 +105,12 @@ const Profile = ({ title }) => {
 
   // Fictitious data
   const booksRead = 120;
-  const followers = 250;
-  const following = 80;
 
   const dataTags_all = JSON.parse(localStorage.getItem("lists")) || []; 
 
   const listsOfUser = user.lists;
 
-  const dataTags = dataTags_all.filter( (listIn) => listsOfUser.includes(listIn.id) );
+  const dataTags = dataTags_all.filter( (listIn) => listsOfUser && listsOfUser.includes(listIn.id) );
 
   const books_ = localStorage.getItem("books");
   const books = JSON.parse(books_) || [];
@@ -114,9 +120,45 @@ const Profile = ({ title }) => {
     return bookSelected;
   }
 
+  const openSettings = (e, idBook) => {
+    e.stopPropagation(); 
+    setIdList(idBook);
+    setAnchorEl(e.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+  
+  const deleteList = (e) => {
+
+    e.preventDefault();
+    
+    user.lists = user.lists.filter( (idx) => idx !== idList);
+
+    const userDataset = JSON.parse(localStorage.getItem("users")) || [];
+
+    userDataset.users = userDataset.users.map( (lt) => {
+
+      if(lt.id === user.id){
+        return user;
+      }else return lt;
+
+    });
+
+    localStorage.setItem("users", JSON.stringify(userDataset));
+    localStorage.setItem("auth/object", JSON.stringify(user));
+
+    toast.success("Removido com sucesso!");
+
+    setAnchorEl(null);
+
+  }
+  
+
   return (
     <NavProfile title={title} list={list} toggleDrawer={toggleDrawer} menu={state}>
-      
+      <ToastContainer />
       <Box
         sx={{
           width: '100%',
@@ -167,23 +209,6 @@ const Profile = ({ title }) => {
                 Lidos
             </Typography>
           </Box>
-          <Box>
-            <Typography variant="h6" fontWeight="bold" color="primary.main" gutterBottom>
-                {followers}
-            </Typography>
-            <Typography variant="subtitle1" color="text.secondary">
-                Seguidores
-            </Typography>
-          </Box>
-
-          <Box>
-            <Typography variant="h6" fontWeight="bold" color="primary.main" gutterBottom>
-                {following}
-            </Typography>
-            <Typography variant="subtitle1" color="text.secondary">
-                Seguindo
-            </Typography>
-          </Box>
 
         </Box>
       </Box>
@@ -194,7 +219,7 @@ const Profile = ({ title }) => {
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
           <TabList variant="scrollable" onChange={handleChange} aria-label="lab API tabs example">
             <Tab  key={0} label="Minhas listas" value="0" />
-            { dataTags.map( (onceList) => (
+            { dataTags && dataTags.map( (onceList) => (
               <Tab key={onceList.id}  label={onceList.title} value={onceList.id}  />
             ))}
             
@@ -203,16 +228,19 @@ const Profile = ({ title }) => {
         
         <TabPanel value="0">
         {/* Tab Panels */}
-        { dataTags.map( (onceList) => (
+        {dataTags && dataTags.map( (onceList) => (
           
-
-          <ItemList 
-          value={onceList.id}
-          onClick={(e) => setValue(onceList.id)}
-          listName={onceList.title}
-          qtnLivos={onceList.books.length}
-          describe={onceList.describe}
-          linkImg={onceList.cover} />
+          <Fragment>
+              <ItemList 
+              value={onceList.id}
+              onClick={(e) => setValue(onceList.id)}
+              openSettings={ (e) => openSettings(e, onceList.id)}
+              listName={onceList.title}
+              qtnLivos={onceList.books.length}
+              describe={onceList.describe}
+              linkImg={onceList.cover} />
+              
+          </Fragment>
 
         
         ) ) }
@@ -221,7 +249,7 @@ const Profile = ({ title }) => {
         </Fab>
         </TabPanel>
 
-        { dataTags.map( (onceList) => (
+        { dataTags && dataTags.map( (onceList) => (
           <TabPanel key={onceList.id} value={onceList.id}>
             { booksOfTag(onceList.books).map( (book) => (<ItemSeach item={book} />)) }
           </TabPanel>
@@ -230,8 +258,14 @@ const Profile = ({ title }) => {
 
       </TabContext>
 
+      <MenuComponent anchorEl={anchorEl} handleClose={handleClose}>
+        <MenuItem onClick={(e) => setModalEditList(true)}><ModeIcon /> Edit</MenuItem>
+        <MenuItem onClick={deleteList}><DeleteIcon /> Delete</MenuItem>
+      </MenuComponent>
+
       
       <ModalItem open={open} setOpen={setOpen} />
+      <ModalEditList open={modalEditList} setOpen={setModalEditList} listId={idList}/>
     </NavProfile>
   );
 };
