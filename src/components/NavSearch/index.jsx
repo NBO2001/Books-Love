@@ -21,11 +21,12 @@ import Chip from '@mui/material/Chip';
 import AutoStoriesIcon from '@mui/icons-material/AutoStories';
 
 
-const NavSearch = ({ title, filters, setFilters, searchButtom, inputSearch, children }) => {
+const NavSearch = ({ title, filters, setFilters, searchButtom, inputSearch, filtersForRemove, setFiltersForRemove, children }) => {
     const navigate = useNavigate();
 
     const [state, setState] = useState(false);
     const [nowFilter, setNowFilter] = useState("");
+    const [notContain, setNotContain] = useState("");
 
     const profile = (e) => {
         e.preventDefault();
@@ -59,6 +60,13 @@ const NavSearch = ({ title, filters, setFilters, searchButtom, inputSearch, chil
       const newArray = filters.filter((item) => item !== tag);
       setFilters(newArray);
     };
+
+    const handleDeleteNot = (tag) => {
+      const newArray = filtersForRemove.filter((item) => item !== tag);
+      setFiltersForRemove(newArray);
+    };
+
+
     
     const addTag = (e) => {
       e.preventDefault();
@@ -66,9 +74,20 @@ const NavSearch = ({ title, filters, setFilters, searchButtom, inputSearch, chil
       setNowFilter("");
     }
 
+    const addNotCont = (e) => {
+      e.preventDefault();
+      setFiltersForRemove([...filtersForRemove, notContain]);
+      setNotContain("");
+    }
+
     const handleField = (e) => {
         e.preventDefault();
         setNowFilter(e.target.value);
+    }
+
+    const handleFieldNotContains = (e) => {
+      e.preventDefault();
+      setNotContain(e.target.value);
     }
 
     const list = () => (
@@ -90,7 +109,7 @@ const NavSearch = ({ title, filters, setFilters, searchButtom, inputSearch, chil
                 <TextField
                   sx={{ height: "48px" }}
                   id="outlined-basic"
-                  label="Filtro"
+                  label="Contém"
                   variant="outlined"
                   value={nowFilter} 
                   onChange={handleField}
@@ -117,6 +136,53 @@ const NavSearch = ({ title, filters, setFilters, searchButtom, inputSearch, chil
                 variant="outlined"
                 label={filter}
                 onDelete={(e) => handleDelete(filter)}
+                />
+            ))}
+            
+            </ListItem>
+          </List>
+          <Divider />
+          <List>
+            <ListItem key={"notTem"} disablePadding >
+              <Box
+                component="form"
+                sx={{
+                '& .MuiTextField-root': { mr: 1, width: '30ch' },
+                }}
+                noValidate
+                autoComplete="off"
+                
+              >
+                <TextField
+                  sx={{ height: "48px" }}
+                  id="outlined-basic"
+                  label="Não Contém"
+                  variant="outlined"
+                  value={notContain} 
+                  onChange={handleFieldNotContains}
+                />
+                <Button
+                  sx={{ height: "48px" }}
+                  variant="outlined"
+                  aria-label="add"
+                  startIcon={<AddIcon />}
+                  onClick={addNotCont}
+                >
+                  Add
+                </Button>
+              </Box>
+              
+            </ListItem>
+          </List>
+          <Divider />
+          <List>
+            <ListItem key={"filtersNotTem"}>
+            {filtersForRemove.map((filter, index) => (
+                <Chip
+                key={index}
+                variant="outlined"
+                label={filter}
+                onDelete={(e) => handleDeleteNot(filter)}
                 />
             ))}
             

@@ -7,6 +7,7 @@ const Search = ({ title }) => {
     const [books, setBooks] = useState([]);
     const [ searchBook, setSearchBook ] = useState("");
     const [ filters, setFilters ] = useState([]);
+    const [ filtersForRemove, setFiltersForRemove]  = useState([]);
     const [open, setOpen] = useState(false);
     const [openList, setOpenList] = useState(false);
     const [ bookId, setBookId ] = useState(0);
@@ -37,18 +38,42 @@ const Search = ({ title }) => {
     }
 
     const applyFilters = (data) => {
-      if (filters.length === 0) {
+      
+
+      if (filters.length === 0 && filtersForRemove.length === 0) {
         return data;
       }
-    
-      return data.filter((book) => {
-        const bookTags = book.tags || [];
-        const lowerCaseFilters = filters.map((filter) => filter.toLowerCase());
-        
-        return lowerCaseFilters.every((filter) => {
-          return bookTags.some((tag) => tag.trim().toLowerCase() === filter);
+
+      let dtContains = data;
+
+      
+
+      if(filters.length !== 0){
+
+        dtContains =  data.filter((book) => {
+          const bookTags = book.tags || [];
+          const lowerCaseFilters = filters.map((filter) => filter.trim().toLowerCase());
+          
+          return lowerCaseFilters.every((filter) => {
+            return bookTags.some((tag) => tag.trim().toLowerCase() === filter);
+          });
         });
-      });
+
+      }
+
+      if(filtersForRemove.length !== 0){
+        dtContains = dtContains.filter((book) => {
+          const bookTags = book.tags || [];
+  
+          const lowerCaseFilters = filtersForRemove.map((filter) => filter.trim().toLowerCase());
+          
+          return lowerCaseFilters.every((filter) => {
+            return !(bookTags.some((tag) => tag.trim().toLowerCase() === filter));
+          });
+        });
+      }
+
+      return dtContains;
     };
 
     const handleSearch = (e) => {
@@ -89,7 +114,9 @@ const Search = ({ title }) => {
     }
   
     return (
-      <NavSearch title={title} filters={filters} setFilters={setFilters} searchButtom={handleSearch} inputSearch={iptSearch}>
+      <NavSearch title={title} filters={filters} 
+      setFilters={setFilters} searchButtom={handleSearch} inputSearch={iptSearch}
+      filtersForRemove={filtersForRemove} setFiltersForRemove={setFiltersForRemove}>
         {books.map((book) => (
           <ItemSeach item={book} key={book.id} onClick={(e) => viewBook(book.id)} >
             <Fab onClick={(e) => clickList(e, book.id)} size="small" sx={{bottom: "5px",left: "15px", zIndex: 0}} color="primary" aria-label="add" >

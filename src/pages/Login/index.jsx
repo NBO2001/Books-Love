@@ -74,6 +74,10 @@ const Login = () => {
             loadLists();
         }
 
+        if(localStorage.getItem('auth/login')){
+            navigate("/search");
+        }
+
       }, []);
     
     const navigate = useNavigate();

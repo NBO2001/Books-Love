@@ -27,6 +27,8 @@ import ModeIcon from '@mui/icons-material/Mode';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { ToastContainer, toast } from 'react-toastify';
 
+import { useNavigate } from 'react-router-dom';
+
 
 const Profile = ({ title }) => {
   const [value, setValue] = useState('0');
@@ -58,9 +60,22 @@ const Profile = ({ title }) => {
     setOpen(true);
   }
 
+  const navigate = useNavigate();
+  
+  const logout = (e) => {
+
+    localStorage.removeItem("auth/id");
+    localStorage.removeItem("auth/login");
+    localStorage.removeItem("auth/name");
+    localStorage.removeItem("auth/object");
+    localStorage.removeItem("auth/username");
+    
+    navigate('/search');
+  }
+
   const list = (anchor) => (
     <Box
-      sx={{ width: 250, height: "100vh", display: 'flex', flexDirection: 'column', justifyContent:"space-between"}}
+      sx={{ width: 300, height: "100vh", display: 'flex', flexDirection: 'column', justifyContent:"space-between"}}
       role="presentation"
       onClick={toggleDrawer(anchor, false)}
       onKeyDown={toggleDrawer(anchor, false)}
@@ -92,10 +107,10 @@ const Profile = ({ title }) => {
           />
 
           <Box sx={{ minWidth: 0, flex: 1 }}>
-            <Typography level="title-sm">{ user.name }</Typography>
+            <Typography level="title-sm">{ user.username }</Typography>
             <Typography level="body-xs">{user.email}</Typography>
           </Box>
-          <IconButton size="sm" variant="plain" color="neutral">
+          <IconButton onClick={logout} size="sm" variant="plain" color="neutral">
             <LogoutRoundedIcon />
           </IconButton>
         </Box>
@@ -195,7 +210,7 @@ const Profile = ({ title }) => {
         sx={{
           width: '100%',
           display: "flex",
-          justifyContent: "space-around",
+          justifyContent: "flex-start",
           alignItems: "center",
         }}
       >
@@ -231,17 +246,16 @@ const Profile = ({ title }) => {
          
         </Stack>
 
-        <Box sx={{ display: "flex", justifyContent: "space-around", width: '100%' }}>
-          {/* Fictitious User Statistics */}
-          <Box>
-            <Typography variant="h6" fontWeight="bold" color="primary.main" gutterBottom>
-                {booksRead}
-            </Typography>
+        <Box>
+            {user && (
+              <Typography variant="h6" fontWeight="bold" color="primary.main" gutterBottom>
+                {user.name}
+              </Typography>
+            )}
+            
             <Typography variant="subtitle1" color="text.secondary">
-                Lidos
+                {booksRead} Lidos
             </Typography>
-          </Box>
-
         </Box>
       </Box>
 
