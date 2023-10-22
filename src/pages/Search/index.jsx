@@ -2,6 +2,7 @@ import React, {useEffect, useState} from "react";
 import {NavSearch, ItemSeach, ModalBook, ModalList } from "../../components";
 import Fab from '@mui/material/Fab';
 import AddIcon from '@mui/icons-material/Add';
+import Typography from '@mui/joy/Typography';
 
 const Search = ({ title }) => {
     const [books, setBooks] = useState([]);
@@ -117,13 +118,13 @@ const Search = ({ title }) => {
       <NavSearch title={title} filters={filters} 
       setFilters={setFilters} searchButtom={handleSearch} inputSearch={iptSearch}
       filtersForRemove={filtersForRemove} setFiltersForRemove={setFiltersForRemove}>
-        {books.map((book) => (
+        {books ? books.map((book) => (
           <ItemSeach item={book} key={book.id} onClick={(e) => viewBook(book.id)} >
             <Fab onClick={(e) => clickList(e, book.id)} size="small" sx={{bottom: "5px",left: "15px", zIndex: 0}} color="primary" aria-label="add" >
               <AddIcon />
             </Fab>
           </ItemSeach>
-        ))}
+        )) : <Typography level="title-sm">Nenhum Resultado encontrado!</Typography>}
 
       <ModalBook open={open} setOpen={setOpen} clickList={clickList} bookId={bookId}/>
       <ModalList open={openList} setOpen={setOpenList} bookId={bookId}/>

@@ -110,6 +110,11 @@ const ModalItem = ({open, setOpen}) => {
         localStorage.setItem("auth/object", JSON.stringify(user));
         localStorage.setItem("lists", JSON.stringify(lists));
 
+        setTagName("");
+        setDescribe("");
+        setSearchBook("");
+        setSelectedOptions([]);
+
         setOpen(false);
 
     }

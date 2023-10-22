@@ -47,8 +47,9 @@ const Cadastro = () => {
                 localStorage.setItem('auth/id', user.id);
                 localStorage.setItem('auth/name', user.name);
                 localStorage.setItem('auth/username', user.username);
+                localStorage.setItem('auth/object', JSON.stringify(user));
                 localStorage.setItem('auth/login', true);
-                navigate('/home');
+                navigate('/');
             }else{
                 toast.error('Incorrect username or password.');
             }
@@ -57,6 +58,57 @@ const Cadastro = () => {
             console.log(e);
             toast.error('Error ao carregar a base!');
         }
+
+    }
+
+    const createNewList = () => {
+
+        const lists = JSON.parse(localStorage.getItem("lists")) || [];
+
+        let index = lists[lists.length-1].id + 1;
+
+        const lidos = {
+            "id": index,
+            "title": "Lidos",
+            "cover": "https://m.media-amazon.com/images/I/817D4UYzM6L._SL1500_.jpg",
+            "describe": "Livros lidos.",
+            "books": []
+        }
+
+        const lendo = {
+            "id": index+1,
+            "title": "Lendo",
+            "cover": "https://m.media-amazon.com/images/I/817D4UYzM6L._SL1500_.jpg",
+            "describe": "Livros que eu estou lendo.",
+            "books": []
+        }
+
+        const queroler = {
+            "id": index + 2,
+            "title": "Quero ler",
+            "cover": "https://m.media-amazon.com/images/I/817D4UYzM6L._SL1500_.jpg",
+            "describe": "Livros que eu quero ler",
+            "books": []
+        }
+
+        const abandonados = {
+            "id": index + 3,
+            "title": "Abandonei",
+            "cover": "https://m.media-amazon.com/images/I/817D4UYzM6L._SL1500_.jpg",
+            "describe": "Livros que eu fiz a mesma coisa que a pessoa que gosto fez comigo; abandonei",
+            "books": []
+        }
+
+        lists.push(lidos);
+        lists.push(lendo);
+        lists.push(queroler);
+        lists.push(abandonados);
+
+
+        localStorage.setItem("lists", JSON.stringify(lists));
+
+        return [index, index+1, index+2, index+3];
+
 
     }
 
@@ -80,6 +132,18 @@ const Cadastro = () => {
 
         let usersTable = JSON.parse(localStorage.getItem("users")) || undefined;
 
+        const links = [
+            "https://st2.depositphotos.com/7214818/10819/i/600/depositphotos_108195990-stock-illustration-illustration-of-a-boy-and.jpg",
+            "https://st5.depositphotos.com/77990272/66333/v/600/depositphotos_663334652-stock-illustration-children-reading-bible-happy-smiling.jpg",
+            "https://st.depositphotos.com/1026266/4961/i/600/depositphotos_49618727-stock-photo-open-book-with-hand-drawn.jpg",
+            "https://st2.depositphotos.com/1000423/5253/i/600/depositphotos_52531379-stock-photo-man-with-book.jpg",
+            "https://st2.depositphotos.com/1000423/7817/i/600/depositphotos_78178168-stock-photo-businesswoman-evades-splash-ideas.jpg",
+            "https://st.depositphotos.com/1000423/5047/i/600/depositphotos_50472539-stock-photo-challenge-in-business.jpg"
+        ]
+
+        const choiceLink = links[ parseInt( (Math.random() * 6) % 6 ) ];
+
+
         if(!usersTable){
             try{
                 const response = await fetch("/fake_base/users.json");
@@ -97,7 +161,10 @@ const Cadastro = () => {
                     "id": maxIdx+1, 
                     "name": name, 
                     "username": username, 
-                    "password": password
+                    "password": password,
+                    "email": username+"@booklove.com",
+                    "img_profile": choiceLink,
+                    "lists": createNewList()
                 }
 
                 const updatedUsers = {"users": [...usersTable.users, newUser]};
@@ -125,7 +192,10 @@ const Cadastro = () => {
                 "id": maxIdx+1, 
                 "name": name, 
                 "username": username, 
-                "password": password
+                "password": password,
+                "email": username+"@booklove.com",
+                "img_profile": choiceLink,
+                "lists": createNewList()
             }
 
             const updatedUsers = {"users": [...usersTable.users, newUser]};
@@ -135,8 +205,6 @@ const Cadastro = () => {
             defineVariables(newUser);
 
         }
-
-        
 
     }
 

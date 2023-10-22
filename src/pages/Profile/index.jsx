@@ -26,6 +26,7 @@ import MenuItem from '@mui/material/MenuItem';
 import ModeIcon from '@mui/icons-material/Mode';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { ToastContainer, toast } from 'react-toastify';
+import Tooltip from '@mui/material/Tooltip';
 
 import { useNavigate } from 'react-router-dom';
 
@@ -290,9 +291,11 @@ const Profile = ({ title }) => {
 
         
         ) ) }
-        <Fab sx={{position:"fixed", bottom: "40px", right: "15px"}} color="primary" aria-label="add" onClick={openModal}>
-          <AddIcon />
-        </Fab>
+        <Tooltip title="Adicionar Lista" placement="left">
+          <Fab sx={{position:"fixed", bottom: "40px", right: "15px"}} color="primary" aria-label="add" onClick={openModal}>
+            <AddIcon />
+          </Fab>
+        </Tooltip>
         </TabPanel>
 
         { dataTags && dataTags.map( (onceList) => (
