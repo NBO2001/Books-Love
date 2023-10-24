@@ -27,6 +27,10 @@ const Search = ({ title }) => {
       loadData();
     }, []);
 
+    useEffect(() => {
+      searchExec();
+    }, [filters, filtersForRemove]);
+
     const shuffleArray = (array) => {
       
       const shuffledArray = [...array];
@@ -77,8 +81,7 @@ const Search = ({ title }) => {
       return dtContains;
     };
 
-    const handleSearch = (e) => {
-      e.preventDefault();
+    const searchExec = () => {
       if (searchBook.trim() === "") {
         const booksBase = JSON.parse(localStorage.getItem("books"));
         const filteredBooks = applyFilters(booksBase);
@@ -95,6 +98,10 @@ const Search = ({ title }) => {
         });
         setBooks(results);
       }
+    }
+    const handleSearch = (e) => {
+      e.preventDefault();
+      searchExec();
     };
 
     const iptSearch = (e) => {
@@ -118,7 +125,7 @@ const Search = ({ title }) => {
       <NavSearch title={title} filters={filters} 
       setFilters={setFilters} searchButtom={handleSearch} inputSearch={iptSearch}
       filtersForRemove={filtersForRemove} setFiltersForRemove={setFiltersForRemove}>
-        {books ? books.map((book) => (
+        {books && books.length !== 0 ? books.map((book) => (
           <ItemSeach item={book} key={book.id} onClick={(e) => viewBook(book.id)} >
             <Fab onClick={(e) => clickList(e, book.id)} size="small" sx={{bottom: "5px",left: "15px", zIndex: 0}} color="primary" aria-label="add" >
               <AddIcon />

@@ -50,8 +50,7 @@ const ItemSeach = ({item, onClick, openSettings, children}) => {
                         </Typography>): (<Skeleton variant="rectangular" width={210} height={60} />)}
 
                     </CardContent>
-                    
-                        
+
                     {children}
                 </Box>
 

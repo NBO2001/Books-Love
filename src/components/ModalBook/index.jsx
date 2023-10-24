@@ -9,6 +9,7 @@ import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import Fab from '@mui/material/Fab';
 import AddIcon from '@mui/icons-material/Add';
+import Chip from '@mui/material/Chip';
 
 const style = {
     position: 'absolute',
@@ -82,9 +83,20 @@ const ModalBook = ({ open, setOpen, bookId, clickList }) => {
                         </Typography>) : (<Skeleton variant="rectangular" width={210} height={60} />)
                     }
 
-                    <Fab onClick={(e) => clickList(e, bookId)} size="small" sx={{mt:5,bottom: "5px",left: "15px", zIndex: 0}} color="primary" aria-label="add" >
+                    <Typography sx={{m: 1}} variant="h5" component="div">Tags</Typography>
+                    <Box sx={{m: 2, overflow: "auto", maxHeight: "100px"}}>
+                        { book && 
+                        book.tags.map( (tag, index) => ( <Chip sx={{m:1}} size="medium" key={index} label={tag} />) )
+                        }
+                        
+                    </Box>
+                    
+                    {clickList && (
+                    <Fab onClick={(e) => clickList(e, bookId)} size="small" sx={{mt:5, position: "fixed",bottom: "10px",left: "15px", zIndex: 0}} color="primary" aria-label="add" >
                         <AddIcon />
                     </Fab>
+                    )}
+                    
 
                 </Box>
             </Modal>

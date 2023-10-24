@@ -75,7 +75,7 @@ const Login = () => {
         }
 
         if(localStorage.getItem('auth/login')){
-            navigate("/search");
+            navigate("/profile");
         }
 
       }, []);
@@ -100,7 +100,7 @@ const Login = () => {
                 localStorage.setItem('auth/username', user.username);
                 localStorage.setItem('auth/object', JSON.stringify(user));
                 localStorage.setItem('auth/login', true);
-                navigate('/search');
+                navigate('/profile');
             }else{
                 toast.error('Incorrect username or password.');
             }

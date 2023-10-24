@@ -252,7 +252,7 @@ const Cadastro = () => {
                         error={erros.inputUsername}
                         helperText={erros.inputUsername && "Username cannot be empty"}
                         sx={{ borderRadius: 50, mb: 2 }}
-                        autoFocus
+                        
                 />
                 <TextField
                         margin="normal"
@@ -266,7 +266,7 @@ const Cadastro = () => {
                         error={erros.inputPasswd}
                         helperText={erros.inputPasswd && "Password cannot be empty"}
                         sx={{ borderRadius: 50, mb: 2 }}
-                        autoFocus
+                        
                 />
                 <TextField
                         margin="normal"
@@ -280,7 +280,7 @@ const Cadastro = () => {
                         error={erros.inputConfPasswd}
                         helperText={erros.inputConfPasswd && "Senhas diferentes."}
                         sx={{ borderRadius: 50, mb: 2 }}
-                        autoFocus
+                        
                 />
                 <FormControl error={!!erros.terms}>
                     <FormControlLabel

@@ -113,6 +113,12 @@ const NavSearch = ({ title, filters, setFilters, searchButtom, inputSearch, filt
                   variant="outlined"
                   value={nowFilter} 
                   onChange={handleField}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        addTag(e);
+                    }
+                  }}
                 />
                 <Button
                   sx={{ height: "48px" }}
@@ -160,6 +166,12 @@ const NavSearch = ({ title, filters, setFilters, searchButtom, inputSearch, filt
                   variant="outlined"
                   value={notContain} 
                   onChange={handleFieldNotContains}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        addNotCont(e);
+                    }
+                  }}
                 />
                 <Button
                   sx={{ height: "48px" }}
@@ -193,7 +205,7 @@ const NavSearch = ({ title, filters, setFilters, searchButtom, inputSearch, filt
 
     const handleCloseDrawer = () => {
         toggleDrawer(undefined, false);
-      };
+    };
 
     return (
         <Fragment>

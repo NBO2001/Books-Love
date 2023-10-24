@@ -1,5 +1,5 @@
 import React, {Fragment, useState} from "react";
-import { NavProfile, ItemList, ItemSeach, ModalItem, MenuComponent, ModalEditList } from "../../components";
+import { NavProfile, ItemList, ItemSeach, ModalItem, MenuComponent, ModalEditList,ModalBook } from "../../components";
 import Avatar from '@mui/material/Avatar';
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
@@ -39,6 +39,8 @@ const Profile = ({ title }) => {
   const [ idList, setIdList ] = useState(null);
   const [ modalEditList, setModalEditList ] = useState(false);
   const [ bookRemoveId, setBookRemoveId ] = useState(null);
+  const [ openModalBook, setOpenModalBook ] = useState(false);
+  const [ bookId, setBookId] = useState(null);
   
   const user_local = localStorage.getItem("auth/object");
   const user = JSON.parse(user_local);
@@ -203,6 +205,12 @@ const Profile = ({ title }) => {
 
   };
   
+  const viewDetalhes = (e, bookIdR) => {
+    e.preventDefault();
+    setBookId(bookIdR);
+    setOpenModalBook(true);
+
+  }
 
   return (
     <NavProfile title={title} list={list} toggleDrawer={toggleDrawer} menu={state}>
@@ -300,7 +308,9 @@ const Profile = ({ title }) => {
 
         { dataTags && dataTags.map( (onceList) => (
           <TabPanel key={onceList.id} value={onceList.id}>
-            { booksOfTag(onceList.books).map( (book) => (<ItemSeach openSettings={(e) => bookOptions(e, { book: book.id, list: onceList.id})} item={book} />)) }
+            { onceList.books.length ?
+             booksOfTag(onceList.books).map( (book) => (<ItemSeach onClick={ (e) => viewDetalhes(e, book.id)} openSettings={(e) => bookOptions(e, { book: book.id, list: onceList.id})} item={book} />))
+            : <Typography> Sem livros aqui!! </Typography> }
           </TabPanel>
         ) ) }
       
@@ -322,6 +332,7 @@ const Profile = ({ title }) => {
       
       <ModalItem open={open} setOpen={setOpen} />
       <ModalEditList open={modalEditList} setOpen={setModalEditList} listId={idList}/>
+      <ModalBook open={openModalBook} setOpen={setOpenModalBook} bookId={bookId}/>
     </NavProfile>
   );
 };
